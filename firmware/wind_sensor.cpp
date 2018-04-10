@@ -2,6 +2,7 @@
 #include "pin_defs.h"
 #include "constants.h"
 #include "Streaming.h"
+#include "ArduinoJson.h"
 
 
 WindSensor::WindSensor()
@@ -36,9 +37,20 @@ void WindSensor::send_data()
     if (send_flag_)
     {
         send_flag_ = false;
+
         float angle = direction_sensor_.angle();
         float speed = speed_sensor_.speed();
-        Serial << "[" << _FLOAT(angle,AngleSendDigits) << ", " << _FLOAT(speed,SpeedSendDigits) << "]" <<  endl;
+        
+        StaticJsonBuffer<SendJsonBufferSize> json_buffer;
+        JsonObject &json_msg = json_buffer.createObject();
+
+        json_msg["time"] = millis();
+        json_msg["angle"] = angle;
+        json_msg["speed"] = speed;
+
+        json_msg.printTo(Serial);
+        Serial << endl;
+
     }
 }
 

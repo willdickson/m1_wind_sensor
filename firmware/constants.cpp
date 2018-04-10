@@ -5,8 +5,8 @@ const float UsecPerSec = 1.0e-6;
 const uint32_t LoopDelayDtMS= 2;
 
 const int Baudrate = 115200;
-extern const int AngleSendDigits = 1; 
-extern const int SpeedSendDigits = 3;
+const int AngleSendDigits = 1; 
+const int SpeedSendDigits = 3;
 const uint32_t SendTimerPeriodUS = 50000;
 
 // Analog input parameters

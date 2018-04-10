@@ -7,6 +7,7 @@ extern const float UsecPerSec;
 extern const uint32_t LoopDelayDtMS;
 
 // Communication parameters
+const int SendJsonBufferSize = 200;
 extern const int Baudrate;
 extern const int AngleSendDigits; 
 extern const int SpeedSendDigits;

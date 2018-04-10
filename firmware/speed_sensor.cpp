@@ -30,14 +30,7 @@ float SpeedSensor::freq_hz()
 
 float SpeedSensor::speed()
 {
-    if (freq_hz_ <= 0.0)
-    {
-        return 0.0;
-    }
-    else
-    {
-        return WindSpeedCalibSlope*freq_hz_ + WindSpeedCalibOffset;
-    }
+    return WindSpeedCalibSlope*freq_hz_ + WindSpeedCalibOffset;
 }
 
 
