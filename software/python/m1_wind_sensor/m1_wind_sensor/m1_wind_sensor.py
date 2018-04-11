@@ -6,7 +6,7 @@ import threading
 import Queue
 
 
-class WindSensor(serial.Serial):
+class M1WindSensor(serial.Serial):
 
     Baudrate = 115200
     ResetSleepDt = 0.5
@@ -15,7 +15,7 @@ class WindSensor(serial.Serial):
 
     def __init__(self,port='/dev/ttyACM0',timeout=10.0):
         param = {'baudrate': self.Baudrate, 'timeout': timeout}
-        super(WindSensor,self).__init__(port,**param)
+        super(M1WindSensor,self).__init__(port,**param)
         time.sleep(self.ResetSleepDt)
         self.data_queue = Queue.Queue()
         self.stop_event = threading.Event()
@@ -35,7 +35,10 @@ class WindSensor(serial.Serial):
     def receive_data(self):
         while not self.stop_event.is_set():
             line = self.readline()
-            line = json.loads(line)
+            try:
+                line = json.loads(line)
+            except ValueError:
+                continue
             self.data_queue.put(line)
             while self.data_queue.qsize() > self.MaxQueueSize:
                 try:
@@ -51,57 +54,5 @@ class WindSensor(serial.Serial):
         except Queue.Empty:
             data = None
         return data
-
-
-# ---------------------------------------------------------------------------------------
-if __name__ == '__main__':
-
-    # Testing -- move to examples
-
-    import matplotlib.pyplot as plt
-    import sys
-
-    duration = 15.0
-
-    wind_sensor = WindSensor()
-    wind_sensor.start()
-
-    t0 = time.time()
-
-    time_list, angle_list, speed_list = [], [], []
-
-    while True:
-
-        data = wind_sensor.get_data()
-        if data is not None:
-            time_list.append(data['time']*1.0e-3)
-            angle_list.append(data['angle'])
-            speed_list.append(data['speed'])
-            print(data)
-
-        if time.time() - t0 > duration:
-            wind_sensor.stop()
-            break;
-
-    plt.figure(1)
-    ax0 = plt.subplot(2,1,1)
-    plt.plot(time_list, angle_list,'.')
-    plt.ylabel('angle (deg)')
-    plt.grid('on')
-    plt.title('Met One Wind Sensor')
-
-    plt.subplot(2,1,2,sharex=ax0)
-    plt.plot(time_list, speed_list,'.')
-    plt.ylabel('speed (m/s)')
-    plt.grid('on')
-
-    plt.show()
-
-
-
-
-
-
-
 
 
