@@ -142,7 +142,7 @@ def m1_logger_app():
         print('* log directory exists')
 
     now = time.time()
-    timestamp_str = datetime.datetime.fromtimestamp(now).strftime('%Y_%m_%d_%H_%M_%S_%f')
+    timestamp_str = datetime.datetime.fromtimestamp(now).strftime('%Y_%m_%d_%H_%M_%S')
     log_filename = os.path.join(log_dir,'m1_wind_data_{0}.txt'.format(timestamp_str))
 
     logger = M1Logger(port=port,filename=log_filename,window_size=window_size)

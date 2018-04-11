@@ -1,0 +1,19 @@
+{
+  "name": "em3242_wind_vane",
+  "version": "0.1.0",
+  "description": "PC interface to em3242 based wind vane",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Will Dickson <will@iorodeo.com>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "moment": "^2.22.0",
+    "serialport": "^6.1.1",
+    "single-line-log": "^1.1.2",
+    "socket.io": "^2.1.0",
+    "time-stamp": "^2.0.0"
+  }
+}
