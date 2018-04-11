@@ -3,7 +3,7 @@
 Software and firmare for reading data from the MET One Intruments wind speed (Model 010C) and direction (Model 020C) sensors.
 
 ### Web App
-![screenshot](images/screen_shot.png)
+![screenshot](images/screenshot_node.png)
 
 ### client 
 * cd to software/javascript/m1_wind_sensor_client
@@ -16,3 +16,8 @@ Software and firmare for reading data from the MET One Intruments wind speed (Mo
 * run w/ npm start
 
 ### Python App and Library
+![screenshot](images/screenshot_python.png)
+
+
+
+### Firmware
