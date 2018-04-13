@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from m1_wind_sensor import M1WindSensor
 
 duration = 15.0
-
 wind_sensor = M1WindSensor()
 wind_sensor.start()
 
