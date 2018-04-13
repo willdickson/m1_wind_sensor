@@ -26,6 +26,10 @@ class M1WindSensor
 
         static IntervalTimer intervalTimer_;
         static volatile bool send_flag_;
+
+    private:
+
+        M1WindSensor() {};
 };
 
 

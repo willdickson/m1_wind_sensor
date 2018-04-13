@@ -7,10 +7,15 @@ template<int TPin>
 class M1DirectionSensor
 {
     public:
+
         static void initialize();
         static float angle();
         static float voltage();
         static uint16_t ain_value();
+
+    private:
+
+        M1DirectionSensor() {};
 
 };
 

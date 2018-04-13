@@ -28,6 +28,10 @@ class M1SpeedSensor
         static uint32_t pulse_dt_us_;
         static float freq_hz_;
 
+    private:
+
+        M1SpeedSensor() {};
+
 };
 
 
