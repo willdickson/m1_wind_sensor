@@ -91,6 +91,8 @@ plt.show()
 
 ### Firmware
 
+* firmware_v1 = original version firmware
+* firmware_v2 = most recent version of firmware using template class + static methods for callbacks
 * Designed for teensy 3.2 development board
 * Requires [Streaming](http://arduiniana.org/libraries/streaming/)  and [ArduinoJson](https://arduinojson.org/)
 * Wind Direction sensor is connected to analog input A0 (0-2.5V range from sensor)
