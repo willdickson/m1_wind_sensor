@@ -14,6 +14,7 @@ class M1WindSensor
     public:
 
         static void initialize();
+        static void check_messages();
         static void send_data();
         static void update_on_loop();
         static inline void update_on_timer();
@@ -25,17 +26,20 @@ class M1WindSensor
         typedef M1DirectionSensor<TDirectionSensorPin> DirectionSensor_;
 
         static IntervalTimer intervalTimer_;
+        static bool send_enabled_;
         static volatile bool send_flag_;
 
     private:
 
         M1WindSensor() {};
+        ~M1WindSensor() {};
 };
 
 
 template<int TSpeedSensorPin, int TDirectionSensorPin>
 void M1WindSensor<TSpeedSensorPin, TDirectionSensorPin>::initialize()
 {
+    send_enabled_ = false;
     send_flag_ = false;
 
     Serial.begin(Baudrate);
@@ -51,9 +55,29 @@ void M1WindSensor<TSpeedSensorPin, TDirectionSensorPin>::initialize()
 
 
 template<int TSpeedSensorPin, int TDirectionSensorPin>
+void M1WindSensor<TSpeedSensorPin, TDirectionSensorPin>::check_messages()
+{
+    while (Serial.available() > 0)
+    {
+        uint8_t cmd = Serial.read();
+        switch (cmd) 
+        {
+            case 'b':
+                send_enabled_ = true;
+                break;
+
+            case 'e':
+                send_enabled_ = false;
+                break;
+        }
+    }
+}
+
+
+template<int TSpeedSensorPin, int TDirectionSensorPin>
 void M1WindSensor<TSpeedSensorPin, TDirectionSensorPin>::send_data()
 {
-    if (send_flag_)
+    if (send_flag_ && send_enabled_)
     {
         send_flag_ = false;
 
@@ -86,6 +110,10 @@ inline void M1WindSensor<TSpeedSensorPin, TDirectionSensorPin>::update_on_timer(
 {
     send_flag_ = true;
 }
+
+
+template<int TSpeedSensorPin, int TDirectionSensorPin>
+bool M1WindSensor<TSpeedSensorPin, TDirectionSensorPin>::send_enabled_ = false;
 
 
 template<int TSpeedSensorPin, int TDirectionSensorPin>

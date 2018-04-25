@@ -121,15 +121,17 @@ setInterval( function() {
 // --------------------------------------------------------------------------------------
 
 let serialPortOpen = false;
+let port = null;
 
 const setupSerialPort = async function() {
 
-  let port = new SerialPort(serialPortName, {baudRate: 115200}) 
+  port = new SerialPort(serialPortName, {baudRate: 115200}) 
     
-  port.on('open', function () {
+  port.on('open', async function () {
       console.log('* USB serial port ' + serialPortName + ' opened'); 
       serialPortOpen = true;
       startTime = -1;
+      await port.write('b\n'); // Send command to begin data stream
   });
 
   port.on('close', function() {
@@ -186,7 +188,8 @@ setInterval( function() {
 
 // SIGINT exit handler
 // --------------------------------------------------------------------------------------
-process.on('SIGINT', (code) => {
+process.on('SIGINT', async (code) => {
+  await port.write('e\n'); // Send command to end data stream
   console.log();
   console.log();
   console.log('* quiting');

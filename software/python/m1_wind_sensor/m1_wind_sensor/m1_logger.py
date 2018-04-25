@@ -109,6 +109,7 @@ class M1Logger(object):
 
         print()
         print('\n* quiting')
+        self.wind_sensor.stop()
 
 
 # Utility

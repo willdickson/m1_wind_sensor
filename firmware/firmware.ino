@@ -15,6 +15,7 @@ void setup()
 void loop()
 {
     WindSensor::update_on_loop();
+    WindSensor::check_messages();
     WindSensor::send_data();
     delay(LoopDelayDtMS);
 }

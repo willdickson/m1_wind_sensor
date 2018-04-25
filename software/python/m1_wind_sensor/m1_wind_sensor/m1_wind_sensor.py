@@ -23,12 +23,14 @@ class M1WindSensor(serial.Serial):
 
     def start(self):
         self.stop_event.clear()
+        self.write('b\n')
         worker = threading.Thread(target=self.receive_data)
         worker.daemon = True
         worker.start()
 
 
     def stop(self):
+        self.write('e\n')
         self.stop_event.set()
 
 
