@@ -7,11 +7,8 @@ import App from './App';
 import io from 'socket.io-client'
 import {store} from './store';
 
-const develop = true; 
-
 Vue.use(Buefy)
 Vue.config.productionTip = false;
-
 
 new Vue({
   el: '#app',
@@ -19,10 +16,13 @@ new Vue({
   components: { App },
   template: '<App/>',
   mounted: function() { 
+    // Setup up socket
     let socket = null;
-    if (develop) {
+    if (location.port === '8080') {
+      // Using development server
       socket = io.connect('http://localhost:5000');
     } else {
+      // Running as webapp
       socket = io.connect('http://' + document.domain  + ':' + location.port);
     }
     store.commit('setSocket', socket);
@@ -41,6 +41,5 @@ new Vue({
       //console.log(JSON.stringify(data));
       this.$store.commit('setDateTime', data.datetime);
     });
-
   }
 })
