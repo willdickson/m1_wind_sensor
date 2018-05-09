@@ -22,7 +22,6 @@
         <SaveDataSwitch/>
       </div>
 
-
       <div class="is-fluid level"> 
         <div id="gauge-div" class="columns container is-fluid is-8" style="margin:auto;"> 
           <div class="column constainer is-fluid is-7" style="margin:auto;" >
