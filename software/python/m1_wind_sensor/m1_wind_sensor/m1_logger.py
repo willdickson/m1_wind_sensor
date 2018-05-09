@@ -65,32 +65,37 @@ class M1Logger(object):
         with open(self.filename,'w') as output_fid:
             while not self.done:
                 # Read data from sensor
-                data = self.wind_sensor.get_data()
-                if data is None:
+                qsize = self.wind_sensor.data_queue.qsize()
+                while True:
+                    data = self.wind_sensor.get_data()
+                    if data is None:
+                        break
+                    # Get current and elapsed time and write data to file
+                    time_now = time.time()
+                    time_elapsed = time_now - self.time_init
+                    output_fid.write('{0} {1} {2}\n'.format(time_now,data['angle'],data['speed']))
+
+                    # Add data to lists and remove data older then window size
+                    speed_mph = convert_to_mph(data['speed'])
+                    self.time_list.append(time_elapsed)
+                    self.angle_list.append(data['angle'])
+                    self.speed_list.append(speed_mph)
+
+                    #print('time  (sec):   {0:1.2f}'.format(time_elapsed))
+                    #print('angle (deg):   {0:1.2f}'.format(data['angle']))
+                    #print('speed (mph):   {0:1.2f}'.format(speed_mph))
+
+                    display_dict = {'time': time_elapsed, 'angle': data['angle'], 'speed': speed_mph, 'qsize': qsize}
+                    sys.stdout.write(' time (s): {time:1.2f}, angle (deg): {angle:1.2f}, speed (mpg): {speed:1.2f}, qsize: {qsize} \r'.format(**display_dict))
+                    sys.stdout.flush()
+
+                if len(self.time_list) < 2:
                     continue
 
-                # Get current and elapsed time and write data to file
-                time_now = time.time()
-                time_elapsed = time_now - self.time_init
-                output_fid.write('{0} {1} {2}\n'.format(time_now,data['angle'],data['speed']))
-
-                # Add data to lists and remove data older then window size
-                speed_mph = convert_to_mph(data['speed'])
-                self.time_list.append(time_elapsed)
-                self.angle_list.append(data['angle'])
-                self.speed_list.append(speed_mph)
                 while (self.time_list[-1] - self.time_list[0]) > self.window_size: 
                     self.time_list.pop(0)
                     self.angle_list.pop(0)
                     self.speed_list.pop(0)
-
-                #print('time  (sec):   {0:1.2f}'.format(time_elapsed))
-                #print('angle (deg):   {0:1.2f}'.format(data['angle']))
-                #print('speed (mph):   {0:1.2f}'.format(speed_mph))
-
-                display_dict = {'time': time_elapsed, 'angle': data['angle'], 'speed': speed_mph}
-                sys.stdout.write(' time (s): {time:1.2f}, angle (deg): {angle:1.2f}, speed (mpg): {speed:1.2f} \r'.format(**display_dict))
-                sys.stdout.flush()
 
                 xmin = self.time_list[0]
                 xmax = max(self.window_size, self.time_list[-1])
