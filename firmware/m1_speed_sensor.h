@@ -31,6 +31,7 @@ class M1SpeedSensor
     private:
 
         M1SpeedSensor() {};
+        static float getFakeSpeed();
 
 };
 
@@ -59,7 +60,11 @@ float M1SpeedSensor<TPin>::freq_hz()
 template<int TPin>
 float M1SpeedSensor<TPin>::speed()
 {
+#ifdef DEVELOP_SEND_FAKE_DATA
+    return getFakeSpeed();
+#else
     return WindSpeedCalibSlope*freq_hz_ + WindSpeedCalibOffset;
+#endif
 }
 
 template<int TPin>
@@ -127,6 +132,16 @@ uint32_t M1SpeedSensor<TPin>::pulse_dt_us_ = PulseDtTimeoutVal_us_;
 
 template<int TPin>
 float M1SpeedSensor<TPin>::freq_hz_ = 0.0;
+
+
+template<int TPin>
+float M1SpeedSensor<TPin>::getFakeSpeed()
+{
+    static float fake_speed = 0.0;
+    fake_speed += random(-100,100)/10000.0;
+    fake_speed = constrain(fake_speed,0.2, 4.0);
+    return fake_speed;
+}
 
 
 #endif

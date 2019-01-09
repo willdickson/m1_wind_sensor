@@ -1,3 +1,4 @@
+//#define DEVELOP_SEND_FAKE_DATA
 #include "Streaming.h"
 #include "pin_defs.h"
 #include "constants.h"
