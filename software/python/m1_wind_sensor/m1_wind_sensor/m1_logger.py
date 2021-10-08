@@ -6,7 +6,7 @@ import signal
 import argparse
 import datetime
 import matplotlib.pyplot as plt
-from m1_wind_sensor import M1WindSensor
+from .m1_wind_sensor import M1WindSensor
 
 
 class M1Logger(object):

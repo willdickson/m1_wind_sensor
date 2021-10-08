@@ -3,7 +3,7 @@ import serial
 import time
 import json
 import threading
-import Queue
+import queue
 
 
 class M1WindSensor(serial.Serial):
@@ -17,20 +17,20 @@ class M1WindSensor(serial.Serial):
         param = {'baudrate': self.Baudrate, 'timeout': timeout}
         super(M1WindSensor,self).__init__(port,**param)
         time.sleep(self.ResetSleepDt)
-        self.data_queue = Queue.Queue()
+        self.data_queue = queue.Queue()
         self.stop_event = threading.Event()
 
 
     def start(self):
         self.stop_event.clear()
-        self.write('b\n')
+        self.write('b\n'.encode())
         worker = threading.Thread(target=self.receive_data)
         worker.daemon = True
         worker.start()
 
 
     def stop(self):
-        self.write('e\n')
+        self.write('e\n'.encode())
         self.stop_event.set()
 
 
@@ -53,7 +53,7 @@ class M1WindSensor(serial.Serial):
     def get_data(self):
         try:
             data = self.data_queue.get_nowait()
-        except Queue.Empty:
+        except queue.Empty:
             data = None
         return data
 
